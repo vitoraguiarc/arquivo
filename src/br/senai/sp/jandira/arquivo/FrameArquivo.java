@@ -1,13 +1,10 @@
 package br.senai.sp.jandira.arquivo;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -18,8 +15,14 @@ import java.awt.Font;
 public class FrameArquivo extends JFrame {
 
 	private JPanel contentPane;
+	private Arquivo arquivo = null;
+	String caminho = "";
 
 	public FrameArquivo() {
+		
+		this.arquivo = new Arquivo();
+		this.caminho = "C:\\Users\\21276756\\Desktop\\TESTE\\arquivo.txt";
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -56,7 +59,6 @@ public class FrameArquivo extends JFrame {
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setBounds(0, 0, 394, 118);
-		textPane.setText(getName());
 		panelMain.add(textPane);
 		
 		JPanel panelFooter = new JPanel();
@@ -65,26 +67,38 @@ public class FrameArquivo extends JFrame {
 		panelFooter.setLayout(null);
 		
 		JButton btnGravar = new JButton("Gravar");
-		btnGravar.setBounds(93, 6, 89, 23);
+		btnGravar.setBounds(10, 5, 89, 23);
 		panelFooter.add(btnGravar);
 		
 		JButton btnLimpar = new JButton("Limpar");
-		btnLimpar.setBounds(192, 6, 89, 23);
+		btnLimpar.setBounds(109, 5, 89, 23);
 		panelFooter.add(btnLimpar);
+		
+		JButton btnSair = new JButton("Sair");
+		btnSair.setBounds(208, 5, 89, 23);
+		panelFooter.add(btnSair);
 		
 		btnGravar.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Arquivo arquivo = new Arquivo();
 				
-				String caminho = "C:\\Users\\21276756\\Desktop\\Teste\\aula.txt";
+				
 				String conteudo = textPane.getText();
 				
 				String conteudoArquivo = arquivo.ler(caminho);
-				conteudoArquivo += "\n" + conteudo;
+				conteudoArquivo +=  conteudo + "\n" ;
 				
-				arquivo.escrever(caminho, conteudoArquivo);
+				if(arquivo.escrever(caminho, conteudoArquivo)) {
+					// msg de sucesso
+					JOptionPane.showMessageDialog(null, "dado gravado com sucesso", "GRAVAÇÃO", JOptionPane.INFORMATION_MESSAGE);
+					textPane.setText("");
+				} else {
+					// msg de erro
+					JOptionPane.showMessageDialog(null, "erro ao gravar dados", "GRAVAÇÃO", JOptionPane.INFORMATION_MESSAGE);
+					textPane.setText("");
+				}
+				
 				
 			}
 		});
